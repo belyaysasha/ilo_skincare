@@ -186,8 +186,8 @@ body{background:var(--cream);color:var(--text);font-family:'Jost',sans-serif;fon
 
 </div>
 <script>
-const TG_TOKEN   = 'ВСТАВЬТЕ_ВАШ_ТОКЕН';
-const TG_CHAT_ID = 'ВСТАВЬТЕ_ВАШ_CHAT_ID';
+const TG_TOKEN   = '8839160431:AAFoLKw0HD0TH3dxc6RKnDlm-7Rtk7UYqxQ';
+const TG_CHAT_ID = '198634909';
 
 let consentGiven = false;
 function toggleConsent(){
@@ -356,72 +356,72 @@ function prevQuestion(){if(currentQ>0){currentQ--;renderQuestion();}}
 const careDB={
   oily:{
     morning:[
-      {step:'Очищение',      p:['Angiopfarm гель с аминокислотами шелка','PHformula Exfo','JWpro пенка для умывания']},
-      {step:'Тоник',         p:['JWpro тоник с церамидами']},
-      {step:'Крем',          p:['Biretix Isorepair (Cantabria Labs)','Daily Fluid (Cantabria Labs)','Gecko Aqua Mat','Angiopfarm увлажняющий флюид']},
-      {step:'Солнцезащита SPF 50+', p:['Gecko Sun Protect 50+','HELIOCARE 360° ACNIMAT SPF-50+']},
+      {step:'Очищение',      p:['Angiopfarm Silk Amino Acids Cleansing Gel','pH formula EXFO cleanser','JWpro Megapolis Foam']},
+      {step:'Тоник',         p:['JWpro Biohacking Tonic']},
+      {step:'Крем',          p:['BIRETIX Isorepair (Cantabria Labs)','BIRETIX Daily Fluid SPF 30 (Cantabria Labs)','Gecko AQUA MATTE','Angiopfarm Moisturizing Fluid']},
+      {step:'Солнцезащита SPF 50+', p:['Gecko Sun Protect SPF 50+','HELIOCARE 360° Acnimat Fluid SPF 50+']},
     ],
     evening:[
-      {step:'Снятие макияжа',p:['Мицелярная вода Cantabria Labs','JWpro мицеллярная вода']},
-      {step:'Очищение',      p:['Angiopfarm гель с аминокислотами шелка','PHformula Exfo','JWpro пенка для умывания']},
-      {step:'Тоник',         p:['JWpro тоник с церамидами']},
-      {step:'Крем',          p:['Biretix Isorepair (Cantabria Labs)','Daily Fluid (Cantabria Labs)','Gecko Aqua Mat','Gecko Hudra Touch']},
+      {step:'Снятие макияжа',p:['SKIN RESIST Micellar Water (Cantabria Labs)','JWpro Clean Marine Micellar Water']},
+      {step:'Очищение',      p:['Angiopfarm Silk Amino Acids Cleansing Gel','pH formula EXFO cleanser','JWpro Megapolis Foam']},
+      {step:'Тоник',         p:['JWpro Biohacking Tonic']},
+      {step:'Крем',          p:['BIRETIX Isorepair (Cantabria Labs)','BIRETIX Daily Fluid SPF 30 (Cantabria Labs)','Gecko AQUA MATTE','Gecko HYDRA TOUCH']},
     ],
   },
   combo:{
     morning:[
-      {step:'Очищение',      p:['Angiopfarm гель с аминокислотами шелка','PHformula Exfo','Skin Resist Velvet Cleanser (Cantabria Labs)']},
-      {step:'Тоник',         p:['JWpro тоник с церамидами']},
-      {step:'Крем',          p:['Daily Fluid (Cantabria Labs)','Gecko Aqua Mat','Gecko Hudra Touch','ANGIOPHARM Ламеллярный крем']},
-      {step:'Солнцезащита SPF 50+', p:['Gecko Sun Protect 50+','HELIOCARE 360° PIGMENT SOLUTION FLUID SPF-50+','SESDERMA AZELAC RU SPF 50+']},
+      {step:'Очищение',      p:['Angiopfarm Silk Amino Acids Cleansing Gel','pH formula EXFO cleanser','SKIN RESIST Velvet Cleanser (Cantabria Labs)']},
+      {step:'Тоник',         p:['JWpro Biohacking Tonic']},
+      {step:'Крем',          p:['BIRETIX Daily Fluid SPF 30 (Cantabria Labs)','Gecko AQUA MATTE','Gecko HYDRA TOUCH','Angiopfarm Lamellar Cream for Combination Skin']},
+      {step:'Солнцезащита SPF 50+', p:['Gecko Sun Protect SPF 50+','HELIOCARE 360° Pigment Solution Fluid SPF 50+','SESDERMA Azelac RU Fluid SPF 50']},
     ],
     evening:[
-      {step:'Снятие макияжа',p:['Мицелярная вода Cantabria Labs','JWpro мицеллярная вода']},
-      {step:'Очищение',      p:['Angiopfarm гель с аминокислотами шелка','PHformula Exfo','Skin Resist Velvet Cleanser (Cantabria Labs)']},
-      {step:'Тоник',         p:['JWpro тоник с церамидами']},
-      {step:'Крем',          p:['Daily Fluid (Cantabria Labs)','Gecko Aqua Mat','Gecko Hudra Touch','ANGIOPHARM Ламеллярный крем']},
+      {step:'Снятие макияжа',p:['SKIN RESIST Micellar Water (Cantabria Labs)','JWpro Clean Marine Micellar Water']},
+      {step:'Очищение',      p:['Angiopfarm Silk Amino Acids Cleansing Gel','pH formula EXFO cleanser','SKIN RESIST Velvet Cleanser (Cantabria Labs)']},
+      {step:'Тоник',         p:['JWpro Biohacking Tonic']},
+      {step:'Крем',          p:['BIRETIX Daily Fluid SPF 30 (Cantabria Labs)','Gecko AQUA MATTE','Gecko HYDRA TOUCH','Angiopfarm Lamellar Cream for Combination Skin']},
     ],
   },
   normal:{
     morning:[
-      {step:'Очищение',      p:['PHformula Exfo','Gecko Soft Milk','Skin Resist Velvet Cleanser (Cantabria Labs)']},
-      {step:'Тоник',         p:['JWpro тоник с церамидами','Angiopharm антикуперозный тоник']},
-      {step:'Крем',          p:['Gecko Hudra Touch','Angiopfarm Omega 369','ANGIOPHARM Ламеллярный крем']},
-      {step:'Солнцезащита SPF 50+', p:['Gecko Sun Protect 50+','HELIOCARE 360° PIGMENT SOLUTION FLUID SPF-50+','SESDERMA AZELAC RU SPF 50+']},
+      {step:'Очищение',      p:['pH formula EXFO cleanser','Gecko SOFT CLEANSING MILK','SKIN RESIST Velvet Cleanser (Cantabria Labs)']},
+      {step:'Тоник',         p:['JWpro Biohacking Tonic','Angiopfarm Anti-Couperose Tonic']},
+      {step:'Крем',          p:['Gecko HYDRA TOUCH','Angiopfarm Cream Comfort Omega 3-6-9','Angiopfarm Lamellar Cream for Combination Skin']},
+      {step:'Солнцезащита SPF 50+', p:['Gecko Sun Protect SPF 50+','HELIOCARE 360° Pigment Solution Fluid SPF 50+','SESDERMA Azelac RU Fluid SPF 50']},
     ],
     evening:[
-      {step:'Снятие макияжа',p:['Мицелярная вода Cantabria Labs','JWpro мицеллярная вода']},
-      {step:'Очищение',      p:['PHformula Exfo','Gecko Soft Milk','Skin Resist Velvet Cleanser (Cantabria Labs)']},
-      {step:'Тоник',         p:['JWpro тоник с церамидами','Angiopharm антикуперозный тоник']},
-      {step:'Крем',          p:['Gecko Hudra Touch','Angiopfarm Omega 369','Gecko Cera Complex']},
+      {step:'Снятие макияжа',p:['SKIN RESIST Micellar Water (Cantabria Labs)','JWpro Clean Marine Micellar Water']},
+      {step:'Очищение',      p:['pH formula EXFO cleanser','Gecko SOFT CLEANSING MILK','SKIN RESIST Velvet Cleanser (Cantabria Labs)']},
+      {step:'Тоник',         p:['JWpro Biohacking Tonic','Angiopfarm Anti-Couperose Tonic']},
+      {step:'Крем',          p:['Gecko HYDRA TOUCH','Angiopfarm Cream Comfort Omega 3-6-9','Gecko CERA COMPLEX']},
     ],
   },
   dry:{
     morning:[
-      {step:'Очищение (молочко)',p:['Gecko Soft Milk',"Gerard's AQUASENSE CLEANSING MILK"]},
-      {step:'Тоник',         p:['Gecko увлажняющий тоник']},
-      {step:'Крем',          p:['Gecko Hudra Touch','Gecko Cera Complex']},
-      {step:'Солнцезащита SPF 50+', p:['Gecko Sun Protect 50+','HELIOCARE 360° PIGMENT SOLUTION FLUID SPF-50+','SESDERMA AZELAC RU SPF 50+']},
+      {step:'Очищение (молочко)',p:['Gecko SOFT CLEANSING MILK',"GERARD'S Aquasense Cleansing Milk"]},
+      {step:'Тоник',         p:['Gecko POST B5 Toner-Mask']},
+      {step:'Крем',          p:['Gecko HYDRA TOUCH','Gecko CERA COMPLEX']},
+      {step:'Солнцезащита SPF 50+', p:['Gecko Sun Protect SPF 50+','HELIOCARE 360° Pigment Solution Fluid SPF 50+','SESDERMA Azelac RU Fluid SPF 50']},
     ],
     evening:[
-      {step:'Снятие макияжа',p:['Мицелярная вода Cantabria Labs','JWpro мицеллярная вода']},
-      {step:'Очищение (молочко)',p:['Gecko Soft Milk',"Gerard's AQUASENSE CLEANSING MILK"]},
-      {step:'Тоник',         p:['Gecko увлажняющий тоник']},
-      {step:'Крем',          p:['Gecko Cera Complex','ANGIOPHARM Восстанавливающий крем с церамидами']},
+      {step:'Снятие макияжа',p:['SKIN RESIST Micellar Water (Cantabria Labs)','JWpro Clean Marine Micellar Water']},
+      {step:'Очищение (молочко)',p:['Gecko SOFT CLEANSING MILK',"GERARD'S Aquasense Cleansing Milk"]},
+      {step:'Тоник',         p:['Gecko POST B5 Toner-Mask']},
+      {step:'Крем',          p:['Gecko CERA COMPLEX','Angiopfarm Ceramide Repair Cream']},
     ],
   },
   sensitive:{
     morning:[
-      {step:'Очищение (только молочко)', p:['Gecko Soft Milk']},
-      {step:'Тоник',         p:['Gecko увлажняющий тоник']},
-      {step:'Крем',          p:['Gecko Hudra Touch','Gecko Cera Complex']},
-      {step:'Солнцезащита SPF 50+', p:['Gecko Sun Protect 50+','HELIOCARE 360° PIGMENT SOLUTION FLUID SPF-50+']},
+      {step:'Очищение (только молочко)', p:['Gecko SOFT CLEANSING MILK']},
+      {step:'Тоник',         p:['Gecko POST B5 Toner-Mask']},
+      {step:'Крем',          p:['Gecko HYDRA TOUCH','Gecko CERA COMPLEX']},
+      {step:'Солнцезащита SPF 50+', p:['Gecko Sun Protect SPF 50+','HELIOCARE 360° Pigment Solution Fluid SPF 50+']},
     ],
     evening:[
-      {step:'Снятие макияжа',p:['Мицелярная вода Cantabria Labs','JWpro мицеллярная вода']},
-      {step:'Очищение (только молочко)', p:['Gecko Soft Milk']},
-      {step:'Тоник',         p:['Gecko увлажняющий тоник']},
-      {step:'Крем',          p:['Gecko Cera Complex','ANGIOPHARM Восстанавливающий крем с церамидами']},
+      {step:'Снятие макияжа',p:['SKIN RESIST Micellar Water (Cantabria Labs)','JWpro Clean Marine Micellar Water']},
+      {step:'Очищение (только молочко)', p:['Gecko SOFT CLEANSING MILK']},
+      {step:'Тоник',         p:['Gecko POST B5 Toner-Mask']},
+      {step:'Крем',          p:['Gecko CERA COMPLEX','Angiopfarm Ceramide Repair Cream']},
     ],
   },
 };
@@ -498,32 +498,32 @@ function buildResult(name){
   if(hasBlackheads&&!isSens&&!hasActive){
     const freq=skin==='oily'?'2–3 раза в неделю':'1–2 раза в неделю';
     evening.forEach(function(s){
-      if(s.step==='Тоник')s.p=['ANGIOPHARM Салициловый тонер 2%','Gecko тонер с салициловой кислотой','JWpro тоник с салициловой кислотой'];
+      if(s.step==='Тоник')s.p=['ANGIOPHARM Salicylic Toner 2%','Gecko SALIBIOME Toner','JWpro Clarifying Tonic'];
     });
     extras.push('Тоник с салициловой кислотой ('+freq+') — растворяет загрязнения внутри пор. В остальные дни — обычный тоник.');
   }
 
   // Enzyme mask
   if(isSens){
-    extras.push("Маска Gerard's EXFOLIGHT (энзимная) — мягкое отшелушивание без кислот. 1 раз в неделю.");
+    extras.push("Маска GERARD'S Exfolight Enzyme Mask (энзимная) — мягкое отшелушивание без кислот. 1 раз в неделю.");
   } else if(hasBlackheads&&!hasActive){
-    extras.push("Маска Gerard's EXFOLIGHT — мягкое отшелушивание. "+(skin==='oily'?'1–2 раза':'1 раз')+' в неделю.');
+    extras.push("Маска GERARD'S Exfolight Enzyme Mask — мягкое отшелушивание. "+(skin==='oily'?'1–2 раза':'1 раз')+' в неделю.');
   }
 
   if(hasActive) warnings.push('При активных воспалённых высыпаниях самолечение может навредить. Схему ухода должен подобрать специалист. Запишитесь к нам — разберёмся вместе.');
 
   if(hasRosacea){
-    evening.push({step:'Азелаиновая к-та (вечер, через день)',p:['JWpro Azelaic Glow Boost Serum','Gecko крем с азелаиновой кислотой 15%']});
+    evening.push({step:'Азелаиновая к-та (вечер, через день)',p:['JW Pro Azelaic Glow Boost Serum','Gecko Az Correct 15%']});
     warnings.push('Купероз и розацеа — сосудистые нарушения, требующие деликатного подхода. Для полной программы лучше обратиться к специалисту.');
   }
 
   if(hasPigment&&!isSens){
-    evening.push({step:'Азелаиновая к-та (вечер)',p:['JWpro Azelaic Glow Boost Serum','Gecko крем с азелаиновой кислотой 15%']});
+    evening.push({step:'Азелаиновая к-та (вечер)',p:['JW Pro Azelaic Glow Boost Serum','Gecko Az Correct 15%']});
     extras.push('При пигментации SPF каждое утро — обязательный шаг, без него осветляющие средства работают вполовину силы.');
   }
 
   if(isSummer&&!isSens){
-    morning.push({step:'Антиоксидант (утро)',p:['ENDOCARE RADIANCE C FERULIC (витамин С + феруловая кислота)','Gecko ANTIOXIDANT SERUM','JWpro Serum ReviC + F','ANGIOPHARM ANTI OXI','PH formula VITA C corrective serum']});
+    morning.push({step:'Антиоксидант (утро)',p:['ENDOCARE Radiance C Ferulic Edafence Serum','Gecko ANTIOXIDANT SERUM','JW PRO Serum ReviC+F','ANGIOPHARM Anti-Oxi Serum','pH formula VITA C corrective serum']});
     extras.push('Антиоксиданты весной и летом — защищают от УФ, выравнивают тон, усиливают SPF.');
   }
 
@@ -531,7 +531,7 @@ function buildResult(name){
     if(isSens){
       warnings.push('Ретинол при чувствительной коже — только после консультации специалиста. Концентрацию подберём индивидуально.');
     } else {
-      evening.push({step:'Ретинол (вечер, 2–3×/нед)',p:['ENDOCARE RENEWAL COMFORT CREAM','ENDOCARE RENEWAL RETINOL SERUM 0,2%','Gecko REVOLUTION','PH formula Vita A','JWPro Smart-Retinoid System']});
+      evening.push({step:'Ретинол (вечер, 2–3×/нед)',p:['ENDOCARE Renewal Comfort Cream','ENDOCARE Renewal Retinol Serum 0,2%','Gecko REVOLUTION','pH formula VITA A corrective cream','JW PRO Smart-Retinoid System']});
       warnings.push('Ретинол — эффективный компонент против морщин. Важно вводить постепенно, начиная с минимальной концентрации. Перед покупкой — консультация косметолога.');
     }
   }
