@@ -113,10 +113,50 @@ body{background:var(--cream);color:var(--text);font-family:'Jost',sans-serif;fon
 .contacts-footer-brand{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:26px;color:var(--cream);margin-bottom:4px;}
 .contacts-footer-tag{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--sage-light);margin-bottom:20px;}
 .contacts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+/* BOOKING */
+.proc-item{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);gap:10px;flex-wrap:wrap;}
+.proc-item:last-child{border-bottom:none;}
+.proc-name{font-size:14px;color:var(--text);flex:1;}
+.proc-price{font-size:14px;font-weight:400;color:var(--sage);white-space:nowrap;}
+.proc-btn{padding:7px 14px;background:var(--sage);color:var(--white);border:none;font-family:'Jost',sans-serif;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block;}
+.proc-btn:hover{background:var(--olive);}
+.booking-form{background:var(--white);border:1px solid var(--line);padding:20px;margin-top:10px;}
+.booking-form-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--olive);margin-bottom:6px;}
+.booking-form-sub{font-size:13px;color:var(--text-mid);margin-bottom:18px;line-height:1.55;}
+.booking-row{display:flex;gap:10px;flex-wrap:wrap;}
+.booking-field{flex:1;min-width:140px;}
+.booking-select{width:100%;padding:11px 14px;border:1px solid var(--line);background:var(--white);font-family:'Jost',sans-serif;font-size:14px;font-weight:300;color:var(--text);outline:none;appearance:none;-webkit-appearance:none;cursor:pointer;}
+.booking-select:focus{border-color:var(--sage);}
+.booking-input{width:100%;padding:11px 14px;border:1px solid var(--line);background:var(--white);font-family:'Jost',sans-serif;font-size:14px;font-weight:300;color:var(--text);outline:none;}
+.booking-input:focus{border-color:var(--sage);}
+.phone-row{display:flex;gap:6px;}
+.phone-code-select{width:120px;flex-shrink:0;padding:11px 8px;border:1px solid var(--line);background:var(--white);font-family:'Jost',sans-serif;font-size:14px;font-weight:300;color:var(--text);outline:none;appearance:none;-webkit-appearance:none;cursor:pointer;}
+.phone-code-select:focus{border-color:var(--sage);}
+.phone-number-input{flex:1;padding:11px 14px;border:1px solid var(--line);background:var(--white);font-family:'Jost',sans-serif;font-size:14px;font-weight:300;color:var(--text);outline:none;}
+.phone-number-input:focus{border-color:var(--sage);}
+.booking-btn{width:100%;margin-top:14px;padding:13px;background:var(--sage);color:var(--white);border:none;font-family:'Jost',sans-serif;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:background .2s;}
+.booking-btn:hover{background:var(--olive);}
+.booking-success{display:none;text-align:center;padding:20px;font-size:14px;color:var(--sage);}
 .contact-item-label{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--sage-light);margin-bottom:4px;}
 .contact-item-value{font-size:14px;color:var(--cream);}
 .contact-item-value a{color:var(--cream);text-decoration:none;}
 @media(min-width:480px){.contacts-grid{grid-template-columns:repeat(4,1fr);}}
+/* Section headers */
+.result-section-hdr{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,4vw,26px);font-weight:400;color:var(--olive);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--sage-light);}
+/* Home care tabs */
+.home-care-block{background:var(--white);border:1px solid var(--line);margin-bottom:8px;}
+.home-care-tab{display:flex;border-bottom:1px solid var(--line);}
+.home-care-tab-btn{flex:1;padding:12px;background:none;border:none;font-family:'Jost',sans-serif;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;}
+.home-care-tab-btn.active{color:var(--sage);border-bottom-color:var(--sage);}
+.home-care-panel{display:none;padding:4px;}.home-care-panel.active{display:block;}
+/* Proc desc */
+.proc-desc{font-size:12px;color:var(--text-light);margin-top:2px;line-height:1.4;}
+/* Contact phone */
+.contact-phone-row{display:flex;gap:6px;}
+.contact-code-sel{width:116px;flex-shrink:0;padding:13px 8px;border:1px solid var(--line);background:var(--white);font-family:'Jost',sans-serif;font-size:13px;color:var(--text);outline:none;appearance:none;-webkit-appearance:none;cursor:pointer;}
+.contact-code-sel:focus{border-color:var(--sage);}
+.contact-num-inp{flex:1;padding:13px 14px;border:1px solid var(--line);background:var(--white);font-family:'Jost',sans-serif;font-size:15px;font-weight:300;color:var(--text);outline:none;}
+.contact-num-inp:focus{border-color:var(--sage);}
 </style>
 </head>
 <body>
@@ -161,8 +201,22 @@ body{background:var(--cream);color:var(--text);font-family:'Jost',sans-serif;fon
       <input class="form-input" type="text" id="inp-name" placeholder="Как вас зовут?">
     </div>
     <div class="form-field">
-      <label class="form-label" for="inp-contact">Телефон или Instagram *</label>
-      <input class="form-input" type="text" id="inp-contact" placeholder="+375 __ ___ __ __ или @username">
+      <label class="form-label">Телефон или Telegram *</label>
+      <div class="contact-phone-row">
+        <select class="contact-code-sel" id="inp-code">
+          <option value="+375">&#127463;&#127486; +375</option>
+          <option value="+7">&#127479;&#127482; +7</option>
+          <option value="+380">&#127482;&#127462; +380</option>
+          <option value="+370">&#127473;&#127481; +370</option>
+          <option value="+371">&#127473;&#127483; +371</option>
+          <option value="+372">&#127466;&#127466; +372</option>
+          <option value="+48">&#127477;&#127473; +48</option>
+          <option value="+49">&#127465;&#127466; +49</option>
+          <option value="+44">&#127468;&#127463; +44</option>
+          <option value="tg">@ Telegram</option>
+        </select>
+        <input class="contact-num-inp" type="text" id="inp-contact" placeholder="29 134 18 28" oninput="this.value=this.value.replace(/[^0-9]/g,'')" inputmode="numeric">
+      </div>
       <div class="form-note">Используем только для связи с вами по поводу ухода и записи.</div>
     </div>
     <div class="consent-block">
@@ -550,35 +604,151 @@ function buildResult(name){
   const skinL={oily:'жирной',combo:'комбинированной',normal:'нормальной',dry:'сухой',sensitive:'чувствительной'};
   const greeting=name?name+', вот ваши рекомендации':'Вот ваши рекомендации';
 
+  // Всегда добавляем "Первый приём"
+  if(!procs.some(function(p){return p[0].includes('Первый');})){
+    procs.unshift(['Первый приём (диагностика + процедура)','110 р']);
+  }
+
+  const procDescs={
+    'Первый приём (диагностика + процедура)':'Диагностика кожи, разбор домашнего ухода и вводная процедура — всё в одном визите',
+    'Чистка механическая':'Ручное очищение пор с нанесением кислот — сужает поры, убирает загрязнения',
+    'Чистка комбинированная':'Механическая чистка + энзимное очищение — глубокое удаление без лишней нагрузки',
+    'Чистка атравматичная':'Деликатное очищение без ручной проработки — для чувствительной кожи',
+    'Уход по типу кожи':'Поддерживающий уход между активными процедурами — состав подбирается индивидуально',
+    'Массаж лица':'Лимфодренажный или комбинированный — убирает отёчность, возвращает тонус',
+    'Массаж + уход':'Массаж с завершающим уходом под ваш тип кожи: питание, увлажнение или успокоение',
+    'Пилинг PH Formula':'Пилинг с регулируемой глубиной — выравнивает тон, убирает пигментацию и постакне',
+    'Витамин С (доп.)':'Антиоксидантный концентрат для яркости — добавляется к любой процедуре',
+    'Микронидлинг':'Дермапен — запускает обновление, уменьшает поры и морщины, усиливает выработку коллагена',
+    'Мезопилинг':'Микронидлинг + пилинг — вещества проникают глубже, эффект усиливается',
+    'TDS (доп.)':'Трансдермальный препарат для ревитализации, укрепления и лифтинга',
+  };
+
+  // Все услуги из прайса для выпадающего списка формы записи
+  const allServices=[
+    ['Первый приём (диагностика + процедура)','110 р','Диагностика кожи, разбор ухода и вводная процедура — всё в одном визите'],
+    ['Консультация','50 р','Анализ состояния кожи и подбор индивидуальной программы ухода'],
+    ['Чистка механическая','100 р','Ручное очищение пор с нанесением кислот — сужает поры, убирает загрязнения'],
+    ['Чистка комбинированная','110 р','Механическая чистка + энзимное очищение — глубокое удаление без лишней нагрузки'],
+    ['Чистка атравматичная','80 р','Деликатное очищение без ручной проработки — для чувствительной кожи'],
+    ['Массаж лица','80 р','Лимфодренажный или комбинированный — убирает отёчность, возвращает тонус'],
+    ['Массаж + уход','110 р','Массаж с завершающим уходом под ваш тип кожи: питание, увлажнение или успокоение'],
+    ['Уход по типу кожи','80 р','Поддерживающий уход между активными процедурами — состав подбирается индивидуально'],
+    ['Микронидлинг','140 р','Дермапен — запускает обновление, уменьшает поры и морщины, усиливает выработку коллагена'],
+    ['Мезопилинг','150 р','Микронидлинг + пилинг — вещества проникают глубже, эффект усиливается'],
+    ['Пилинг PH Formula','130 р','Пилинг с регулируемой глубиной — выравнивает тон, убирает пигментацию и постакне'],
+    ['Витамин С (доп.)','25 р','Антиоксидантный концентрат для яркости — добавляется к любой процедуре'],
+    ['TDS (доп.)','20 р','Трансдермальный препарат для ревитализации, укрепления и лифтинга'],
+    ['Альгинатная маска (доп.)','10 р','Завершающий шаг: успокаивает, увлажняет и закрепляет результат процедуры'],
+  ];
+
+  const procTgBase='https://t.me/ilo_skincare?text=';
+
+  // Render: предупреждения
   const renderW=warnings.map(function(w){return '<div class="warning-block"><p>'+w+'</p></div>';}).join('');
-  const extItems=extras.filter(function(e){return e!=='_PEPTIDES_';});
-  const hasPH=extras.includes('_PEPTIDES_');
-  const renderE=(!extItems.length&&!hasPH)?'':'<div class="result-section"><div class="result-section-title">Дополнения и советы</div>'
-    +extItems.map(function(e){return '<div style="font-size:14px;color:var(--text-mid);line-height:1.65;padding:12px 0;border-bottom:1px solid var(--line)">'+e+'</div>';}).join('')
+
+  // Render: процедуры + форма записи
+  const renderP=(function(){
+    var procList=hasActive
+      ?'<div class="warning-block"><p>При активных воспалениях процедуры подбираются индивидуально. Запишитесь на консультацию — вместе составим безопасную программу.</p></div>'
+      :'<div class="procedures-block">'
+        +procs.map(function(p){
+          var msg=encodeURIComponent('Хочу записаться на «'+p[0]+'»');
+          var desc=procDescs[p[0]]||'';
+          return '<div class="proc-item">'
+            +'<div style="flex:1"><div class="proc-name">'+p[0]+'</div>'+(desc?'<div class="proc-desc">'+desc+'</div>':'')+'</div>'
+            +'<span class="proc-price" style="margin:0 8px">'+p[1]+'</span>'
+            +'<a class="proc-btn" href="'+procTgBase+msg+'" target="_blank">Записаться</a>'
+            +'</div>';
+        }).join('')
+        +'</div>';
+
+    // Форма записи со всеми услугами
+    var bookForm='<div class="booking-form">'
+      +'<div class="booking-form-title">Записаться на приём</div>'
+      +'<div class="booking-form-sub">Выберите процедуру, удобную дату и время — свяжемся для подтверждения.</div>'
+      +'<div id="booking-body">'
+      +'<div class="booking-row"><div class="booking-field"><label class="form-label">Процедура</label>'
+      +'<select class="booking-select" id="book-proc">'
+      +allServices.map(function(s){return '<option value="'+s[0]+' — '+s[1]+'">'+s[0]+' — '+s[1]+' · '+s[2]+'</option>';}).join('')
+      +'</select></div></div>'
+      +'<div class="booking-row" style="margin-top:10px">'
+      +'<div class="booking-field"><label class="form-label">Дата</label>'
+      +'<input class="booking-input" type="date" id="book-date" min="'+new Date().toISOString().split('T')[0]+'"></div>'
+      +'<div class="booking-field"><label class="form-label">Время</label>'
+      +'<select class="booking-select" id="book-time">'
+      +['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'].map(function(t){return '<option>'+t+'</option>';}).join('')
+      +'</select></div></div>'
+      +'<div class="booking-row" style="margin-top:10px">'
+      +'<div class="booking-field"><label class="form-label">Имя</label>'
+      +'<input class="booking-input" type="text" id="book-name" placeholder="Ваше имя"></div>'
+      +'<div class="booking-field"><label class="form-label">Телефон или Telegram</label>'
+      +'<div class="phone-row">'
+      +'<select class="phone-code-select" id="book-code">'
+      +'<option value="+375">+375 BY</option>'
+      +'<option value="+7">+7 RU</option>'
+      +'<option value="+380">+380 UA</option>'
+      +'<option value="+370">+370 LT</option>'
+      +'<option value="+371">+371 LV</option>'
+      +'<option value="+372">+372 EE</option>'
+      +'<option value="+48">+48 PL</option>'
+      +'<option value="+49">+49 DE</option>'
+      +'<option value="+44">+44 GB</option>'
+      +'<option value="tg">@ Telegram</option>'
+      +'</select>'
+      +'<input class="phone-number-input" type="text" id="book-contact" placeholder="29 134 18 28" oninput="this.value=this.value.replace(/[^0-9]/g,\'\')" inputmode="numeric">'
+      +'</div></div></div>'
+      +'<button class="booking-btn" onclick="submitBooking()">Отправить заявку</button>'
+      +'</div>'
+      +'<div class="booking-success" id="booking-success">Заявка отправлена! Свяжемся для подтверждения.</div>'
+      +'</div>';
+
+    return '<div class="result-section">'
+      +'<div class="result-section-hdr">Рекомендуемые процедуры</div>'
+      +'<p style="font-size:14px;color:var(--text-mid);margin-bottom:16px;line-height:1.6">Программа составлена для <strong>'+skinL[skin]+'</strong> кожи с учётом ваших запросов.</p>'
+      +procList
+      +bookForm
+      +'</div>';
+  })();
+
+  // Render: домашний уход с вкладками + дополнения внутри
+  var extItems=extras.filter(function(e){return e!=='_PEPTIDES_';});
+  var hasPH=extras.includes('_PEPTIDES_');
+  var extrasHtml=(!extItems.length&&!hasPH)?'':'<div style="padding:12px 4px 4px">'
+    +'<div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--sage-light);padding-bottom:8px;border-bottom:1px solid var(--line);margin-bottom:12px">Дополнения и советы</div>'
+    +extItems.map(function(e){return '<div style="font-size:14px;color:var(--text-mid);line-height:1.65;padding:8px 0;border-bottom:1px solid var(--line)">'+e+'</div>';}).join('')
     +(hasPH?'<div class="placeholder-block" style="margin-top:10px"><p class="placeholder-text">Средства с пептидами для осенне-зимнего ухода — скоро добавим!</p></div>':'')
+    +renderW
     +'</div>';
 
-  const renderP=hasActive?
-    '<div class="result-section"><div class="result-section-title">Рекомендуемые процедуры</div><div class="warning-block"><p>При активных воспалениях процедуры подбираются индивидуально. Запишитесь на консультацию.</p></div></div>':
-    '<div class="result-section"><div class="result-section-title">Рекомендуемые процедуры</div><div class="procedures-block">'
-    +procs.map(function(p){return '<div class="proc-item"><span class="proc-name">'+p[0]+'</span><span class="proc-price">'+p[1]+'</span></div>';}).join('')
-    +'</div></div>';
+  var tabId='hc'+Math.floor(Math.random()*99999);
+  var mId=tabId+'-m', eId=tabId+'-e';
+  var renderCare='<div class="result-section">'
+    +'<div class="result-section-hdr">Рекомендации по домашнему уходу</div>'
+    +'<div class="home-care-block">'
+    +'<div class="home-care-tab" id="tab-'+tabId+'">'
+    +'<button class="home-care-tab-btn active" data-panel="'+mId+'" data-tab="tab-'+tabId+'" onclick="switchTab(this)">&#9728; Утренний уход</button>'
+    +'<button class="home-care-tab-btn" data-panel="'+eId+'" data-tab="tab-'+tabId+'" onclick="switchTab(this)">&#9790; Вечерний уход</button>'
+    +'</div>'
+    +'<div style="padding:4px">'
+    +'<div class="home-care-panel active" id="'+mId+'">'+renderSteps(morning)+'</div>'
+    +'<div class="home-care-panel" id="'+eId+'">'+renderSteps(evening)+'</div>'
+    +'</div>'
+    +extrasHtml
+    +'</div>'
+    +'</div>';
 
-  // CTA blocks
-  const ctaConsult='<div class="result-section"><div class="result-section-title">Онлайн-консультация по домашнему уходу</div>'
+  // CTA: онлайн-консультация
+  var ctaConsult='<div class="result-section">'
+    +'<div class="result-section-hdr">Онлайн-консультация по домашнему уходу</div>'
     +'<div class="cta-block light"><div class="cta-title">Точный подбор косметики под вас</div>'
     +'<div class="cta-price">50 р</div>'
-    +'<div class="cta-text">Косметолог удалённо разберёт состояние кожи и порекомендует конкретные продукты под ваш бюджет. Эти рекомендации — общий ориентир; на консультации подберём точнее.</div>'
-    +'<div class="cta-buttons"><a class="cta-btn" href="https://t.me/ilo_skincare" target="_blank">Telegram</a><a class="cta-btn" href="https://wa.me/375291341828" target="_blank">WhatsApp</a></div>'
+    +'<div class="cta-text">Косметолог удалённо разберёт состояние кожи и порекомендует конкретные продукты под ваш бюджет.</div>'
+    +'<div class="cta-buttons"><a class="cta-btn" href="https://t.me/ilo_skincare" target="_blank">Telegram</a>'
+    +'<a class="cta-btn" href="https://wa.me/375291341828" target="_blank">WhatsApp</a></div>'
     +'</div></div>';
 
-  const ctaBook='<div class="result-section"><div class="result-section-title">Записаться на процедуру</div>'
-    +'<div class="cta-block"><div class="cta-title">Хотите видимый результат?</div>'
-    +'<div class="cta-text">Запишитесь на приём — подберём программу. г. Минск, ул. Короля, 51</div>'
-    +'<div class="cta-buttons"><a class="cta-btn" href="https://t.me/ilo_skincare" target="_blank">Telegram</a><a class="cta-btn" href="https://wa.me/375291341828" target="_blank">WhatsApp</a><a class="cta-btn" href="https://instagram.com/ilo_skincare" target="_blank">Instagram</a></div>'
-    +'</div></div>';
-
-  const footer='<div class="contacts-footer"><div class="contacts-footer-brand">cosmetologist &amp; care</div>'
+  var footer='<div class="contacts-footer"><div class="contacts-footer-brand">cosmetologist &amp; care</div>'
     +'<div class="contacts-footer-tag">ilo skincare · Минск</div>'
     +'<div class="contacts-grid">'
     +'<div><div class="contact-item-label">Instagram</div><div class="contact-item-value"><a href="https://instagram.com/ilo_skincare">@ilo_skincare</a></div></div>'
@@ -587,24 +757,68 @@ function buildResult(name){
     +'<div><div class="contact-item-label">Запись</div><div class="contact-item-value"><a href="https://t.me/ilo_skincare">Telegram / WhatsApp</a></div></div>'
     +'</div></div>';
 
+  // Порядок: приветствие → онлайн-консультация → процедуры (с описанием типа кожи + форма) → домашний уход (с дополнениями внутри) → footer
   return '<div class="result-header">'
     +'<div class="season-tag">'+season.label+'</div>'
     +'<h2 class="result-greeting">'+greeting+'</h2>'
-    +'<p class="result-summary">Программа для <strong>'+skinL[skin]+'</strong> кожи с учётом ваших запросов.</p>'
     +'</div>'
-    // CTA консультации — ПЕРВЫМ
     +ctaConsult
-    +renderW
-    +'<div class="result-section"><div class="result-section-title">Утренний уход</div>'+renderSteps(morning)+'</div>'
-    +'<div class="result-section"><div class="result-section-title">Вечерний уход</div>'+renderSteps(evening)+'</div>'
-    +renderE+renderP+ctaBook+footer;
+    +renderP
+    +renderCare
+    +footer;
+}
+
+
+function switchTab(btn){
+  var panelId=btn.getAttribute('data-panel');
+  var tabId=btn.getAttribute('data-tab');
+  var tabEl=document.getElementById(tabId);
+  if(!tabEl||!panelId)return;
+  tabEl.querySelectorAll('.home-care-tab-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  var block=tabEl.closest('.home-care-block');
+  block.querySelectorAll('.home-care-panel').forEach(function(p){p.classList.remove('active');});
+  var panel=document.getElementById(panelId);
+  if(panel)panel.classList.add('active');
+}
+
+function submitBooking(){
+  const proc=document.getElementById('book-proc').value;
+  const date=document.getElementById('book-date').value;
+  const time=document.getElementById('book-time').value;
+  const name=document.getElementById('book-name').value.trim();
+  const code=document.getElementById('book-code').value;
+  const num=document.getElementById('book-contact').value.trim();
+  if(!num){document.getElementById('book-contact').style.borderColor='var(--warn)';return;}
+  if(!date){document.getElementById('book-date').style.borderColor='var(--warn)';return;}
+  // Собираем контакт
+  const contact=code==='tg'?('@'+num.replace('@','')):( code+' '+num.replace(/[^0-9]/g,'').replace(/(\d{2})(\d{3})(\d{2})(\d{2})/,'($1) $2-$3-$4') );
+  // Форматируем дату по-русски
+  const d=new Date(date+'T12:00:00');
+  const dateStr=d.toLocaleDateString('ru-BY',{day:'numeric',month:'long',year:'numeric'});
+  const msg='Заявка на запись — ilo skincare\n\n'
+    +'Процедура: '+proc+'\n'
+    +'Дата: '+dateStr+'\n'
+    +'Время: '+time+'\n'
+    +'Имя: '+(name||'—')+'\n'
+    +'Контакт: '+contact;
+  if(TG_TOKEN!=='ВСТАВЬТЕ_ВАШ_ТОКЕН'){
+    fetch('https://api.telegram.org/bot'+TG_TOKEN+'/sendMessage',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({chat_id:TG_CHAT_ID,text:msg})
+    }).catch(function(){});
+  }
+  document.getElementById('booking-body').style.display='none';
+  document.getElementById('booking-success').style.display='block';
 }
 
 async function submitAndShow(){
   const name=document.getElementById('inp-name').value.trim();
-  const contact=document.getElementById('inp-contact').value.trim();
+  const inpCode=document.getElementById('inp-code')?document.getElementById('inp-code').value:'+375';
+  const inpNum=document.getElementById('inp-contact').value.trim();
+  const contact=inpCode==='tg'?('@'+inpNum.replace('@','')):( inpCode+' '+inpNum );
   let valid=true;
-  if(!contact){document.getElementById('inp-contact').classList.add('form-error');valid=false;}
+  if(!inpNum){document.getElementById('inp-contact').classList.add('form-error');valid=false;}
   else document.getElementById('inp-contact').classList.remove('form-error');
   if(!consentGiven){document.getElementById('consent-error').style.display='block';valid=false;}
   if(!valid)return;
