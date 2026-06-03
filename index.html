@@ -558,7 +558,12 @@ function buildResult(name){
   if(concerns.includes('pigment')) addons.pigment.forEach(function(p){if(!procs.some(function(x){return x[0]===p[0];}))procs.push(p);});
   if(concerns.includes('aging'))   addons.aging.forEach(function(p){if(!procs.some(function(x){return x[0]===p[0];}))procs.push(p);});
   if(concerns.includes('rosacea')) procs=addons.rosacea;
-  procs=procs.slice(0,3);
+  // Карбокситерапия — всем кроме активных высыпаний и купероза
+  var noCarb=hasActive||concerns.includes('rosacea');
+  if(!noCarb&&!procs.some(function(p){return p[0].includes('Карбокси');})){
+    procs.push(['Карбокситерапия Medicare','от 110 р']);
+  }
+  procs=procs.slice(0,4);
 
   var procDescs={
     'Первый приём (диагностика + процедура)':'Диагностика кожи, разбор ухода и вводная процедура — всё в одном визите',
@@ -641,7 +646,7 @@ function buildResult(name){
     +'<div class="procedures-block">'
     +procs.map(function(p){
       var desc=procDescs[p[0]]||'';
-      var isNew=p[0].includes('новинка')||p[0].includes('Карбокси');
+      var isNew=p[0].includes('новинка')||p[0].includes('Карбокси')||p[0].includes('карбокси');
       var cleanName=p[0].replace(' — новинка','');
       var nameHtml=cleanName+(isNew?'<span class="new-badge">&#10022; новинка</span>':'');
       return '<div class="proc-item">'
