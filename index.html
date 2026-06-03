@@ -560,10 +560,15 @@ function buildResult(name){
   if(concerns.includes('rosacea')) procs=addons.rosacea;
   // Карбокситерапия — всем кроме активных высыпаний и купероза
   var noCarb=hasActive||concerns.includes('rosacea');
-  if(!noCarb&&!procs.some(function(p){return p[0].includes('Карбокси');})){
-    procs.push(['Карбокситерапия Medicare','от 110 р']);
+  // Сначала обрезаем до 3, потом гарантированно добавляем карбокси 4-й
+  if(!noCarb){
+    procs=procs.slice(0,3);
+    if(!procs.some(function(p){return p[0].includes('Карбокси');})){
+      procs.push(['Карбокситерапия Medicare','от 110 р']);
+    }
+  } else {
+    procs=procs.slice(0,4);
   }
-  procs=procs.slice(0,4);
 
   var procDescs={
     'Первый приём (диагностика + процедура)':'Диагностика кожи, разбор ухода и вводная процедура — всё в одном визите',
