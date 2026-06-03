@@ -141,6 +141,11 @@ body{background:var(--cream);color:var(--text);font-family:'Jost',sans-serif;fon
 .contact-item-value{font-size:14px;color:var(--cream);}
 .contact-item-value a{color:var(--cream);text-decoration:none;}
 @media(min-width:480px){.contacts-grid{grid-template-columns:repeat(4,1fr);}}
+/* Dikidi */
+.dikidi-wrap{border:1px solid var(--line);overflow:hidden;background:var(--white);margin-top:0;}
+.dikidi-wrap iframe{width:100%;border:none;display:block;min-height:600px;}
+/* Новинка badge */
+.new-badge{display:inline-block;background:var(--sage);color:white;font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;padding:2px 7px;margin-left:8px;vertical-align:middle;border-radius:2px;}
 /* Section headers */
 .result-section-hdr{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,4vw,26px);font-weight:400;color:var(--olive);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--sage-light);}
 /* Home care tabs */
@@ -526,229 +531,163 @@ function toggleAlts(id,btn){
 }
 
 function buildResult(name){
-  altCounter=0;
-  const a=answers,season=getSeason(),skin=a.skin_type;
-  const concerns=Array.isArray(a.concern)?a.concern:[a.concern];
-  const isSens=skin==='sensitive',hasActive=a.breakouts==='yes';
-  const isMale=a.gender==='male';
-  const age=a.age,isSummer=season.key==='summer';
-  const hasRosacea=concerns.includes('rosacea'),hasPigment=concerns.includes('pigment');
-  const hasAging=concerns.includes('aging')||age==='35_45'||age==='over45';
-  const hasBlackheads=concerns.includes('blackheads')||concerns.includes('acne');
+  var skin=answers.skin_type;
+  var concerns=Array.isArray(answers.concern)?answers.concern:[answers.concern];
+  var isSens=skin==='sensitive', hasActive=answers.breakouts==='yes';
+  var isSummer=getSeason().key==='summer';
+  var hasAging=concerns.includes('aging')||answers.age==='35_45'||answers.age==='over45';
+  var season=getSeason();
 
-  let morning=JSON.parse(JSON.stringify(careDB[skin].morning));
-  let evening=JSON.parse(JSON.stringify(careDB[skin].evening));
-  let extras=[],warnings=[];
-
-  // Мужчины — убрать снятие макияжа, заменить на двойное очищение
-  if(isMale){
-    evening=evening.filter(function(s){return s.step!=='Снятие макияжа';});
-    // Добавим примечание про двойное очищение
-    const cleanIdx=evening.findIndex(function(s){return s.step.toLowerCase().includes('очищени');});
-    if(cleanIdx!==-1) evening[cleanIdx].step='Очищение (двойное — нанести, смыть, повторить)';
-  }
-
-  // Blackheads — салициловый тоник вечером
-  if(hasBlackheads&&!isSens&&!hasActive){
-    const freq=skin==='oily'?'2–3 раза в неделю':'1–2 раза в неделю';
-    evening.forEach(function(s){
-      if(s.step==='Тоник')s.p=['ANGIOPHARM Salicylic Toner 2%','Gecko SALIBIOME Toner','JWpro Clarifying Tonic'];
-    });
-    extras.push('Тоник с салициловой кислотой ('+freq+') — растворяет загрязнения внутри пор. В остальные дни — обычный тоник.');
-  }
-
-  // Enzyme mask
-  if(isSens){
-    extras.push("Маска GERARD'S Exfolight Enzyme Mask (энзимная) — мягкое отшелушивание без кислот. 1 раз в неделю.");
-  } else if(hasBlackheads&&!hasActive){
-    extras.push("Маска GERARD'S Exfolight Enzyme Mask — мягкое отшелушивание. "+(skin==='oily'?'1–2 раза':'1 раз')+' в неделю.');
-  }
-
-  if(hasActive) warnings.push('При активных воспалённых высыпаниях самолечение может навредить. Схему ухода должен подобрать специалист. Запишитесь к нам — разберёмся вместе.');
-
-  if(hasRosacea){
-    evening.push({step:'Азелаиновая к-та (вечер, через день)',p:['JW Pro Azelaic Glow Boost Serum','Gecko Az Correct 15%']});
-    warnings.push('Купероз и розацеа — сосудистые нарушения, требующие деликатного подхода. Для полной программы лучше обратиться к специалисту.');
-  }
-
-  if(hasPigment&&!isSens){
-    evening.push({step:'Азелаиновая к-та (вечер)',p:['JW Pro Azelaic Glow Boost Serum','Gecko Az Correct 15%']});
-    extras.push('При пигментации SPF каждое утро — обязательный шаг, без него осветляющие средства работают вполовину силы.');
-  }
-
-  if(isSummer&&!isSens){
-    morning.push({step:'Антиоксидант (утро)',p:['ENDOCARE Radiance C Ferulic Edafence Serum','Gecko ANTIOXIDANT SERUM','JW PRO Serum ReviC+F','ANGIOPHARM Anti-Oxi Serum','pH formula VITA C corrective serum']});
-    extras.push('Антиоксиданты весной и летом — защищают от УФ, выравнивают тон, усиливают SPF.');
-  }
-
-  if(hasAging&&!hasActive){
-    if(isSens){
-      warnings.push('Ретинол при чувствительной коже — только после консультации специалиста. Концентрацию подберём индивидуально.');
-    } else {
-      evening.push({step:'Ретинол (вечер, 2–3×/нед)',p:['ENDOCARE Renewal Comfort Cream','ENDOCARE Renewal Retinol Serum 0,2%','Gecko REVOLUTION','pH formula VITA A corrective cream','JW PRO Smart-Retinoid System']});
-      warnings.push('Ретинол — эффективный компонент против морщин. Важно вводить постепенно, начиная с минимальной концентрации. Перед покупкой — консультация косметолога.');
-    }
-  }
-
-  if(!isSummer) extras.push('_PEPTIDES_');
-
-  // Procedures
-  let procs=[...(proceduresDB[skin]||[])];
-  if(concerns.includes('acne')&&!hasActive)procs=[...proceduresDB.acne,...procs];
-  if(hasPigment)procs=[...proceduresDB.pigment,...procs];
-  if(hasAging)procs=[...proceduresDB.aging,...procs];
-  if(hasRosacea)procs=proceduresDB.rosacea;
-  const seen=new Set();
-  procs=procs.filter(function(p){const k=p[0];if(seen.has(k))return false;seen.add(k);return true;}).slice(0,5);
-
-  const skinL={oily:'жирной',combo:'комбинированной',normal:'нормальной',dry:'сухой',sensitive:'чувствительной'};
-  const greeting=name?name+', вот ваши рекомендации':'Вот ваши рекомендации';
-
-  // Всегда добавляем "Первый приём"
-  if(!procs.some(function(p){return p[0].includes('Первый');})){
-    procs.unshift(['Первый приём (диагностика + процедура)','110 р']);
-  }
-
-  const procDescs={
-    'Первый приём (диагностика + процедура)':'Диагностика кожи, разбор домашнего ухода и вводная процедура — всё в одном визите',
-    'Чистка механическая':'Ручное очищение пор с нанесением кислот — сужает поры, убирает загрязнения',
-    'Чистка комбинированная':'Механическая чистка + энзимное очищение — глубокое удаление без лишней нагрузки',
-    'Чистка атравматичная':'Деликатное очищение без ручной проработки — для чувствительной кожи',
-    'Уход по типу кожи':'Поддерживающий уход между активными процедурами — состав подбирается индивидуально',
-    'Массаж лица':'Лимфодренажный или комбинированный — убирает отёчность, возвращает тонус',
-    'Массаж + уход':'Массаж с завершающим уходом под ваш тип кожи: питание, увлажнение или успокоение',
-    'Пилинг PH Formula':'Пилинг с регулируемой глубиной — выравнивает тон, убирает пигментацию и постакне',
-    'Витамин С (доп.)':'Антиоксидантный концентрат для яркости — добавляется к любой процедуре',
-    'Микронидлинг':'Дермапен — запускает обновление, уменьшает поры и морщины, усиливает выработку коллагена',
-    'Мезопилинг':'Микронидлинг + пилинг — вещества проникают глубже, эффект усиливается',
-    'TDS (доп.)':'Трансдермальный препарат для ревитализации, укрепления и лифтинга',
+  // Прайс-лист процедур по типу кожи
+  var proceduresDB={
+    oily:     [['Первый приём (диагностика + процедура)','110 р'],['Чистка механическая','100 р'],['Чистка комбинированная','110 р'],['Пилинг PH Formula','130 р']],
+    combo:    [['Первый приём (диагностика + процедура)','110 р'],['Чистка атравматичная','80 р'],['Чистка комбинированная','110 р'],['Уход по типу кожи','80 р']],
+    normal:   [['Первый приём (диагностика + процедура)','110 р'],['Уход по типу кожи','80 р'],['Массаж лица','80 р'],['Массаж + уход','110 р']],
+    dry:      [['Первый приём (диагностика + процедура)','110 р'],['Уход по типу кожи','80 р'],['Массаж + уход','110 р'],['Массаж лица','80 р']],
+    sensitive:[['Первый приём (диагностика + процедура)','110 р'],['Чистка атравматичная','80 р'],['Уход по типу кожи','80 р']],
+  };
+  var addons={
+    acne:    [['Чистка механическая','100 р'],['Пилинг PH Formula','130 р']],
+    pigment: [['Пилинг PH Formula','130 р'],['Витамин С (доп.)','25 р'],['Микронидлинг','140 р']],
+    aging:   [['Микронидлинг','140 р'],['Мезопилинг','150 р']],
+    rosacea: [['Уход по типу кожи','80 р'],['Массаж лица','80 р']],
   };
 
-  // Все услуги из прайса для выпадающего списка формы записи
-  const allServices=[
-    ['Первый приём (диагностика + процедура)','110 р','Диагностика кожи, разбор ухода и вводная процедура — всё в одном визите'],
-    ['Консультация','50 р','Анализ состояния кожи и подбор индивидуальной программы ухода'],
-    ['Чистка механическая','100 р','Ручное очищение пор с нанесением кислот — сужает поры, убирает загрязнения'],
-    ['Чистка комбинированная','110 р','Механическая чистка + энзимное очищение — глубокое удаление без лишней нагрузки'],
-    ['Чистка атравматичная','80 р','Деликатное очищение без ручной проработки — для чувствительной кожи'],
-    ['Массаж лица','80 р','Лимфодренажный или комбинированный — убирает отёчность, возвращает тонус'],
-    ['Массаж + уход','110 р','Массаж с завершающим уходом под ваш тип кожи: питание, увлажнение или успокоение'],
-    ['Уход по типу кожи','80 р','Поддерживающий уход между активными процедурами — состав подбирается индивидуально'],
-    ['Микронидлинг','140 р','Дермапен — запускает обновление, уменьшает поры и морщины, усиливает выработку коллагена'],
-    ['Мезопилинг','150 р','Микронидлинг + пилинг — вещества проникают глубже, эффект усиливается'],
-    ['Пилинг PH Formula','130 р','Пилинг с регулируемой глубиной — выравнивает тон, убирает пигментацию и постакне'],
-    ['Витамин С (доп.)','25 р','Антиоксидантный концентрат для яркости — добавляется к любой процедуре'],
-    ['TDS (доп.)','20 р','Трансдермальный препарат для ревитализации, укрепления и лифтинга'],
-    ['Альгинатная маска (доп.)','10 р','Завершающий шаг: успокаивает, увлажняет и закрепляет результат процедуры'],
+  var procs=[...(proceduresDB[skin]||[])];
+  if(concerns.includes('acne')&&!hasActive) addons.acne.forEach(function(p){if(!procs.some(function(x){return x[0]===p[0];}))procs.unshift(p);});
+  if(concerns.includes('pigment')) addons.pigment.forEach(function(p){if(!procs.some(function(x){return x[0]===p[0];}))procs.push(p);});
+  if(concerns.includes('aging'))   addons.aging.forEach(function(p){if(!procs.some(function(x){return x[0]===p[0];}))procs.push(p);});
+  if(concerns.includes('rosacea')) procs=addons.rosacea;
+  procs=procs.slice(0,3);
+
+  var procDescs={
+    'Первый приём (диагностика + процедура)':'Диагностика кожи, разбор ухода и вводная процедура — всё в одном визите',
+    'Чистка механическая':'Ручное очищение пор с нанесением кислот — сужает поры, убирает загрязнения',
+    'Чистка комбинированная':'Механическая чистка + энзимное очищение — глубокое удаление',
+    'Чистка атравматичная':'Деликатное очищение без ручной проработки — для чувствительной кожи',
+    'Уход по типу кожи':'Поддерживающий уход между процедурами — состав подбирается индивидуально',
+    'Массаж лица':'Лимфодренажный или комбинированный — убирает отёчность, возвращает тонус',
+    'Массаж + уход':'Массаж с завершающим уходом под ваш тип кожи',
+    'Пилинг PH Formula':'Пилинг с регулируемой глубиной — выравнивает тон, убирает пигментацию',
+    'Витамин С (доп.)':'Антиоксидантный концентрат для яркости кожи',
+    'Микронидлинг':'Дермапен — обновление, уменьшение пор и морщин, усиление коллагена',
+    'Мезопилинг':'Микронидлинг + пилинг — усиленный эффект',
+    'TDS (доп.)':'Трансдермальный препарат для ревитализации и лифтинга',
+    'Карбокситерапия Medicare':'Кислородный импульс для кожи: тонус, сияние, лифтинг — без инъекций',
+  };
+
+  var skinL={oily:'жирной',combo:'комбинированной',normal:'нормальной',dry:'сухой',sensitive:'чувствительной'};
+  var greeting=name?'Привет, '+name+'!':'Готово!';
+
+  // Краткий уход
+  var careSummary={
+    oily:'Лёгкое гелевое очищение · матирующий флюид · SPF 50+ каждое утро. Салициловый тоник 2–3×/нед. вечером.',
+    combo:'Мягкое очищение · лёгкий крем · SPF 50+ каждое утро.',
+    normal:'Мягкое очищение · увлажняющий крем с церамидами · SPF 50+ каждое утро.',
+    dry:'Очищение молочком · питательный крем с церамидами · SPF 50+ каждое утро.',
+    sensitive:'Только молочко для очищения · крем с церамидами · SPF 50+. Без кислот.',
+  };
+  var careExtras=[];
+  if(concerns.includes('blackheads')&&!isSens&&!hasActive)
+    careExtras.push('+ Салициловый тоник вечером '+(skin==='oily'?'2–3×':'1–2×')+'/нед.');
+  if(concerns.includes('pigment')&&!isSens)
+    careExtras.push('+ Азелаиновая кислота вечером — выравнивает тон');
+  if(concerns.includes('rosacea'))
+    careExtras.push('+ Азелаиновая кислота вечером · без AHA/BHA');
+  if(isSummer&&!isSens)
+    careExtras.push('+ Витамин С утром (весна/лето) — антиоксидантная защита');
+  if(hasAging&&!hasActive&&!isSens)
+    careExtras.push('+ Ретинол вечером 2–3×/нед. — только после консультации специалиста');
+  if(hasActive)
+    careExtras.push('⚠️ Активные воспаления — схему лечения подбирает специалист');
+  if(concerns.includes('rosacea'))
+    careExtras.push('⚠️ Купероз/розацеа — рекомендуется консультация');
+
+  // Все услуги для формы
+  var allServices=[
+    ['Первый приём (диагностика + процедура)','110 р'],
+    ['Консультация','50 р'],
+    ['Чистка механическая','100 р'],
+    ['Чистка комбинированная','110 р'],
+    ['Чистка атравматичная','80 р'],
+    ['Массаж лица','80 р'],
+    ['Массаж + уход','110 р'],
+    ['Уход по типу кожи','80 р'],
+    ['Карбокситерапия Medicare (лицо)','110 р'],
+    ['Карбокситерапия Medicare (лицо + шея)','130 р'],
+    ['Микронидлинг','140 р'],
+    ['Мезопилинг','150 р'],
+    ['Пилинг PH Formula','130 р'],
+    ['Витамин С (доп.)','25 р'],
+    ['TDS (доп.)','20 р'],
+    ['Альгинатная маска (доп.)','10 р'],
+    ['Онлайн-консультация по домашнему уходу','50 р'],
   ];
 
-  const procTgBase='https://t.me/ilo_skincare?text=';
+  var minDate=new Date().toISOString().split('T')[0];
+  var times=['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:00','20:30','21:00','Другое время (укажу в комментарии)'];
 
-  // Render: предупреждения
-  const renderW=warnings.map(function(w){return '<div class="warning-block"><p>'+w+'</p></div>';}).join('');
+  // ── Render ─────────────────────────────────────────────────────────────────
 
-  // Render: процедуры + форма записи
-  const renderP=(function(){
-    var procList=hasActive
-      ?'<div class="warning-block"><p>При активных воспалениях процедуры подбираются индивидуально. Запишитесь на консультацию — вместе составим безопасную программу.</p></div>'
-      :'<div class="procedures-block">'
-        +procs.map(function(p){
-          var msg=encodeURIComponent('Хочу записаться на «'+p[0]+'»');
-          var desc=procDescs[p[0]]||'';
-          return '<div class="proc-item">'
-            +'<div style="flex:1"><div class="proc-name">'+p[0]+'</div>'+(desc?'<div class="proc-desc">'+desc+'</div>':'')+'</div>'
-            +'<span class="proc-price" style="margin:0 8px">'+p[1]+'</span>'
-            +'<a class="proc-btn" href="'+procTgBase+msg+'" target="_blank">Записаться</a>'
-            +'</div>';
-        }).join('')
+  var header='<div class="result-header">'
+    +'<div class="season-tag">'+season.label+'</div>'
+    +'<h2 class="result-greeting">'+greeting+'</h2>'
+    +'<p style="font-size:14px;color:var(--text-mid);line-height:1.6;margin-top:6px">'
+    +'Программа для <strong>'+skinL[skin]+'</strong> кожи.</p>'
+    +'</div>';
+
+  var procsHtml='<div class="result-section">'
+    +'<div class="result-section-hdr">Рекомендуем попробовать</div>'
+    +'<div class="procedures-block">'
+    +procs.map(function(p){
+      var desc=procDescs[p[0]]||'';
+      var isNew=p[0].includes('новинка')||p[0].includes('Карбокси');
+      var cleanName=p[0].replace(' — новинка','');
+      var nameHtml=cleanName+(isNew?'<span class="new-badge">&#10022; новинка</span>':'');
+      return '<div class="proc-item">'
+        +'<div style="flex:1"><div class="proc-name">'+nameHtml+'</div>'
+        +(desc?'<div class="proc-desc">'+desc+'</div>':'')+'</div>'
+        +'<span class="proc-price" style="margin:0 8px;white-space:nowrap">'+p[1]+'</span>'
         +'</div>';
-
-    // Форма записи со всеми услугами
-    var bookForm='<div class="booking-form">'
-      +'<div class="booking-form-title">Записаться на приём</div>'
-      +'<div class="booking-form-sub">Выберите процедуру, удобную дату и время — свяжемся для подтверждения.</div>'
-      +'<div id="booking-body">'
-      +'<div class="booking-row"><div class="booking-field"><label class="form-label">Процедура</label>'
-      +'<select class="booking-select" id="book-proc">'
-      +allServices.map(function(s){return '<option value="'+s[0]+' — '+s[1]+'">'+s[0]+' — '+s[1]+' · '+s[2]+'</option>';}).join('')
-      +'</select></div></div>'
-      +'<div class="booking-row" style="margin-top:10px">'
-      +'<div class="booking-field"><label class="form-label">Дата</label>'
-      +'<input class="booking-input" type="date" id="book-date" min="'+new Date().toISOString().split('T')[0]+'"></div>'
-      +'<div class="booking-field"><label class="form-label">Время</label>'
-      +'<select class="booking-select" id="book-time">'
-      +['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'].map(function(t){return '<option>'+t+'</option>';}).join('')
-      +'</select></div></div>'
-      +'<div class="booking-row" style="margin-top:10px">'
-      +'<div class="booking-field"><label class="form-label">Имя</label>'
-      +'<input class="booking-input" type="text" id="book-name" placeholder="Ваше имя"></div>'
-      +'<div class="booking-field"><label class="form-label">Телефон или Telegram</label>'
-      +'<div class="phone-row">'
-      +'<select class="phone-code-select" id="book-code">'
-      +'<option value="+375">+375 BY</option>'
-      +'<option value="+7">+7 RU</option>'
-      +'<option value="+380">+380 UA</option>'
-      +'<option value="+370">+370 LT</option>'
-      +'<option value="+371">+371 LV</option>'
-      +'<option value="+372">+372 EE</option>'
-      +'<option value="+48">+48 PL</option>'
-      +'<option value="+49">+49 DE</option>'
-      +'<option value="+44">+44 GB</option>'
-      +'<option value="tg">@ Telegram</option>'
-      +'</select>'
-      +'<input class="phone-number-input" type="text" id="book-contact" placeholder="29 134 18 28" oninput="this.value=this.value.replace(/[^0-9]/g,\'\')" inputmode="numeric">'
-      +'</div></div></div>'
-      +'<button class="booking-btn" onclick="submitBooking()">Отправить заявку</button>'
-      +'</div>'
-      +'<div class="booking-success" id="booking-success">Заявка отправлена! Свяжемся для подтверждения.</div>'
-      +'</div>';
-
-    return '<div class="result-section">'
-      +'<div class="result-section-hdr">Рекомендуемые процедуры</div>'
-      +'<p style="font-size:14px;color:var(--text-mid);margin-bottom:16px;line-height:1.6">Программа составлена для <strong>'+skinL[skin]+'</strong> кожи с учётом ваших запросов.</p>'
-      +procList
-      +bookForm
-      +'</div>';
-  })();
-
-  // Render: домашний уход с вкладками + дополнения внутри
-  var extItems=extras.filter(function(e){return e!=='_PEPTIDES_';});
-  var hasPH=extras.includes('_PEPTIDES_');
-  var extrasHtml=(!extItems.length&&!hasPH)?'':'<div style="padding:12px 4px 4px">'
-    +'<div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--sage-light);padding-bottom:8px;border-bottom:1px solid var(--line);margin-bottom:12px">Дополнения и советы</div>'
-    +extItems.map(function(e){return '<div style="font-size:14px;color:var(--text-mid);line-height:1.65;padding:8px 0;border-bottom:1px solid var(--line)">'+e+'</div>';}).join('')
-    +(hasPH?'<div class="placeholder-block" style="margin-top:10px"><p class="placeholder-text">Средства с пептидами для осенне-зимнего ухода — скоро добавим!</p></div>':'')
-    +renderW
-    +'</div>';
-
-  var tabId='hc'+Math.floor(Math.random()*99999);
-  var mId=tabId+'-m', eId=tabId+'-e';
-  var renderCare='<div class="result-section">'
-    +'<div class="result-section-hdr">Рекомендации по домашнему уходу</div>'
-    +'<div class="home-care-block">'
-    +'<div class="home-care-tab" id="tab-'+tabId+'">'
-    +'<button class="home-care-tab-btn active" data-panel="'+mId+'" data-tab="tab-'+tabId+'" onclick="switchTab(this)">&#9728; Утренний уход</button>'
-    +'<button class="home-care-tab-btn" data-panel="'+eId+'" data-tab="tab-'+tabId+'" onclick="switchTab(this)">&#9790; Вечерний уход</button>'
-    +'</div>'
-    +'<div style="padding:4px">'
-    +'<div class="home-care-panel active" id="'+mId+'">'+renderSteps(morning)+'</div>'
-    +'<div class="home-care-panel" id="'+eId+'">'+renderSteps(evening)+'</div>'
-    +'</div>'
-    +extrasHtml
-    +'</div>'
-    +'</div>';
-
-  // CTA: онлайн-консультация
-  var ctaConsult='<div class="result-section">'
-    +'<div class="result-section-hdr">Онлайн-консультация по домашнему уходу</div>'
-    +'<div class="cta-block light"><div class="cta-title">Точный подбор косметики под вас</div>'
-    +'<div class="cta-price">50 р</div>'
-    +'<div class="cta-text">Косметолог удалённо разберёт состояние кожи и порекомендует конкретные продукты под ваш бюджет.</div>'
-    +'<div class="cta-buttons"><a class="cta-btn" href="https://t.me/ilo_skincare" target="_blank">Telegram</a>'
-    +'<a class="cta-btn" href="https://wa.me/375291341828" target="_blank">WhatsApp</a></div>'
+    }).join('')
     +'</div></div>';
 
-  var footer='<div class="contacts-footer"><div class="contacts-footer-brand">cosmetologist &amp; care</div>'
+  var bookingHtml='<div class="result-section">'
+    +'<div class="result-section-hdr">Записаться на приём</div>'
+    +'<p style="font-size:13px;color:var(--text-mid);margin-bottom:12px;line-height:1.55">'
+    +'Выберите удобное время — вы увидите реальные свободные слоты. Рекомендованные процедуры уже отмечены в форме.</p>'
+    +'<a href="https://dikidi.net/2065921" target="_blank" rel="noopener" '
+    +'style="display:block;text-align:center;padding:16px;background:var(--sage);'
+    +'color:white;font-family:Jost,sans-serif;font-size:13px;letter-spacing:0.12em;'
+    +'text-transform:uppercase;text-decoration:none;transition:background .2s">'
+    +'Записаться онлайн →</a>'
+    +'<p style="font-size:12px;color:var(--text-light);margin-top:8px;text-align:center">'
+    +'Откроется страница записи с реальным расписанием и свободными слотами</p>'
+    +'</div>';
+
+  var careHtml='<div class="result-section">'
+    +'<div class="result-section-hdr" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:var(--cream-dark);padding:14px 16px;margin-bottom:0" onclick="toggleCare()">'
+    +'<span>Домашний уход</span>'
+    +'<span id="care-arrow" style="font-size:14px;font-weight:500;color:var(--sage);background:var(--sage);color:white;padding:4px 12px;letter-spacing:0.05em">↓ показать</span>'
+    +'</div>'
+    +'<div id="care-body" style="display:none;margin-top:12px">'
+    +'<div class="result-block">'
+    +'<p style="font-size:14px;color:var(--text-mid);line-height:1.75">'+careSummary[skin]+'</p>'
+    +(careExtras.length?'<div style="margin-top:10px">'+careExtras.map(function(e){
+      return '<p style="font-size:13px;color:var(--text-mid);line-height:1.6;padding:5px 0;border-top:1px solid var(--line)">'+e+'</p>';
+    }).join('')+'</div>':'')
+    +'</div>'
+    +'<div class="cta-block light" style="margin-top:10px">'
+    +'<div class="cta-title">Хотите точный список средств?</div>'
+    +'<div class="cta-text">Онлайн-консультация — подберём конкретную косметику под ваш бюджет.</div>'
+    +'<div class="cta-price">50 р</div>'
+    +'<div class="cta-buttons"><a class="cta-btn" href="https://t.me/ilo_skincare" target="_blank">Telegram</a>'
+    +'<a class="cta-btn" href="https://wa.me/375291341828" target="_blank">WhatsApp</a></div>'
+    +'</div>'
+    +'</div></div>';
+
+  var footer='<div class="contacts-footer">'
+    +'<div class="contacts-footer-brand">cosmetologist &amp; care</div>'
     +'<div class="contacts-footer-tag">ilo skincare · Минск</div>'
     +'<div class="contacts-grid">'
     +'<div><div class="contact-item-label">Instagram</div><div class="contact-item-value"><a href="https://instagram.com/ilo_skincare">@ilo_skincare</a></div></div>'
@@ -757,15 +696,7 @@ function buildResult(name){
     +'<div><div class="contact-item-label">Запись</div><div class="contact-item-value"><a href="https://t.me/ilo_skincare">Telegram / WhatsApp</a></div></div>'
     +'</div></div>';
 
-  // Порядок: приветствие → онлайн-консультация → процедуры (с описанием типа кожи + форма) → домашний уход (с дополнениями внутри) → footer
-  return '<div class="result-header">'
-    +'<div class="season-tag">'+season.label+'</div>'
-    +'<h2 class="result-greeting">'+greeting+'</h2>'
-    +'</div>'
-    +ctaConsult
-    +renderP
-    +renderCare
-    +footer;
+  return header+procsHtml+bookingHtml+careHtml+footer;
 }
 
 
@@ -848,6 +779,14 @@ async function submitAndShow(){
   }
   document.getElementById('result-content').innerHTML=buildResult(name);
   showScreen('screen-result');
+}
+function toggleCare(){
+  var b=document.getElementById('care-body');
+  var a=document.getElementById('care-arrow');
+  if(!b)return;
+  var open=b.style.display==='none'||b.style.display==='';
+  b.style.display=open?'block':'none';
+  a.textContent=open?'↑ скрыть':'↓ показать';
 }
 </script>
 </body>
