@@ -553,28 +553,51 @@ function buildResult(name){
 
   // ── Процедуры по типу кожи ─────────────────────────────────────────────────
   var proceduresDB={
-    oily:[['Первый приём','110 р'],['Чистка механическая','100 р'],['Чистка комбинированная','110 р']],
-    combo:[['Первый приём','110 р'],['Чистка атравматичная','80 р'],['Чистка комбинированная','110 р']],
-    normal:[['Первый приём','110 р'],['Уход по типу кожи','80 р'],['Массаж лица','80 р']],
-    dry:[['Первый приём','110 р'],['Уход по типу кожи','80 р'],['Массаж + уход','110 р']],
-    sensitive:[['Первый приём','110 р'],['Чистка атравматичная','80 р'],['Уход по типу кожи','80 р']],
+    oily:[['Чистка комбинированная','110 р'],['Чистка механическая','100 р']],
+    combo:[['Чистка комбинированная','110 р'],['Чистка атравматичная','80 р']],
+    normal:[['Уход по типу кожи','80 р'],['Массаж лица','80 р']],
+    dry:[['Массаж + уход','110 р'],['Уход по типу кожи','80 р']],
+    sensitive:[['Чистка атравматичная','80 р'],['Уход по типу кожи','80 р']],
   };
+  // Процедуры под конкретные запросы (приоритет выше типа кожи)
   var addons={
     acne:[['Чистка механическая','100 р'],['Пилинг PH Formula','130 р']],
+    blackheads:[['Чистка комбинированная','110 р'],['Чистка механическая','100 р']],
     pigment:[['Пилинг PH Formula','130 р'],['Микронидлинг','140 р']],
-    aging:[['Микронидлинг','140 р'],['Мезопилинг','150 р']],
+    aging:[['Микронидлинг','140 р'],['Пилинг PH Formula','130 р'],['Мезопилинг','150 р']],
+    dehydration:[['Пилинг PH Formula','130 р'],['Микронидлинг','140 р']],
     rosacea:[['Уход по типу кожи','80 р'],['Массаж лица','80 р']],
   };
-  var procs=[...(proceduresDB[skin]||[])];
-  if(concerns.includes('acne')&&!hasActive) addons.acne.forEach(function(p){if(!procs.some(function(x){return x[0]===p[0];}))procs.unshift(p);});
-  if(concerns.includes('pigment')) addons.pigment.forEach(function(p){if(!procs.some(function(x){return x[0]===p[0];}))procs.push(p);});
-  if(concerns.includes('aging')) addons.aging.forEach(function(p){if(!procs.some(function(x){return x[0]===p[0];}))procs.push(p);});
-  if(concerns.includes('rosacea')) procs=addons.rosacea;
+
+  // Собираем процедуры: СНАЧАЛА под запросы (важнее), потом база по типу кожи
+  var procs=[];
+  function addProc(p){ if(!procs.some(function(x){return x[0]===p[0];})) procs.push(p); }
+
+  // Купероз/розацеа — особый случай: только щадящие процедуры
+  if(concerns.includes('rosacea')){
+    addons.rosacea.forEach(addProc);
+  } else {
+    // Процедуры под каждый выбранный запрос
+    if(concerns.includes('acne')&&!hasActive) addons.acne.forEach(addProc);
+    if(concerns.includes('blackheads')) addons.blackheads.forEach(addProc);
+    if(concerns.includes('pigment')) addons.pigment.forEach(addProc);
+    if(concerns.includes('aging')) addons.aging.forEach(addProc);
+    if(concerns.includes('dehydration')) addons.dehydration.forEach(addProc);
+    // Добиваем базовыми по типу кожи (если запросов мало или нет)
+    (proceduresDB[skin]||[]).forEach(addProc);
+  }
+
+  // Карбокситерапия — всем кроме активных высыпаний и купероза
   var noCarb=hasActive||concerns.includes('rosacea');
   if(!noCarb){
     procs=procs.slice(0,3);
-    if(!procs.some(function(p){return p[0].includes('Карбокси');})) procs.push(['Карбокситерапия Medicare','от 110 р']);
+    procs.push(['Карбокситерапия Medicare','от 110 р']);
   } else { procs=procs.slice(0,4); }
+  // Первый приём — только для новичков (нет опыта процедур)
+  if(answers.experience==='never'){
+    procs.unshift(['Первый приём','110 р']);
+  }
+  procs=procs.slice(0,5);
 
   // ── Объяснения процедур "почему вам" ───────────────────────────────────────
   function procWhy(name){
