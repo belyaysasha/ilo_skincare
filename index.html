@@ -167,6 +167,12 @@ body{background:var(--cream);color:var(--text);font-family:'Jost',sans-serif;fon
 .proc-why{font-size:13px;color:var(--text-mid);line-height:1.55;}
 .care-time{font-size:13px;font-weight:400;letter-spacing:0.1em;text-transform:uppercase;color:var(--sage);margin-bottom:8px;}
 .care-steps{font-size:14px;color:var(--text);line-height:1.6;margin-bottom:8px;}
+.care-step{padding:8px 0;border-bottom:1px solid var(--line);}
+.care-step:last-child{border-bottom:none;}
+.care-step-label{font-size:12px;letter-spacing:0.06em;text-transform:uppercase;color:var(--sage-mid);margin-bottom:3px;}
+.care-step-prod{font-size:14px;color:var(--text);line-height:1.45;}
+.care-step-prod b{font-weight:400;}
+.care-step-why{font-size:12px;color:var(--text-light);}
 .care-why{font-size:13px;color:var(--text-mid);line-height:1.6;font-style:italic;}
 .care-divider{height:1px;background:var(--line);margin:18px 0;}
 .actives-title{font-size:13px;font-weight:400;letter-spacing:0.05em;color:var(--text);margin-bottom:10px;}
@@ -621,15 +627,78 @@ function buildResult(name){
     return {name:p[0],price:p[1],why:procWhy(p[0]),isNew:isNew};
   });
 
-  // ── Домашний уход: шаги + почему ───────────────────────────────────────────
-  var clean=isMale?'двойное очищение':'снятие макияжа и очищение';
-  var careMorning={
-    oily:'Гелевое очищение → '+(isSummer?'антиоксидантная сыворотка → ':'')+'лёгкий увлажняющий флюид → SPF 50+',
-    combo:'Мягкое очищение → '+(isSummer?'антиоксидант → ':'')+'лёгкий крем → SPF 50+',
-    normal:'Мягкое очищение → '+(isSummer?'антиоксидант → ':'')+'увлажняющий крем → SPF 50+',
-    dry:'Очищение молочком → увлажняющий тоник → питательный крем → SPF 50+',
-    sensitive:'Очищение молочком → успокаивающий тоник → крем с церамидами → SPF 50+',
+  // ── Домашний уход: тип средства + актив + зачем (без брендов) ──────────────
+  // Формат шага: [Название шага, [тип средства, ключевой актив/зачем]]
+  var s=skin;
+  var blackheads=concerns.includes('blackheads')||concerns.includes('acne');
+  // Ретинол: только при возрастных изменениях ИЛИ возраст 45+
+  var wantRetinol=(concerns.includes('aging')||answers.age==='over45')&&!isSens&&!hasActive;
+
+  // Очищение по типу кожи (одно средство, используется и утром и вечером)
+  var cleanseMap={
+    oily:['Гель или пенка для умывания','мягко очищает поры и убирает излишки себума, не пересушивая'],
+    combo:['Гель для умывания','очищает Т-зону, сохраняя баланс на щеках'],
+    normal:['Мягкое очищающее средство','деликатно очищает, сохраняя комфорт кожи'],
+    dry:['Очищающее молочко','очищает и питает, не нарушая липидный барьер'],
+    sensitive:['Деликатное молочко','очищает максимально мягко, без раздражения'],
   };
+  var tonicMap={
+    oily:['Тоник с церамидами','восстанавливает барьер и увлажняет после умывания'],
+    combo:['Тоник с церамидами','балансирует и восстанавливает барьер'],
+    normal:['Тоник с церамидами','увлажняет и подготавливает кожу к уходу'],
+    dry:['Увлажняющий тоник-маска','насыщает кожу влагой, успокаивает'],
+    sensitive:['Успокаивающий тоник-маска','снимает чувство стянутости, успокаивает'],
+  };
+  var creamMap={
+    oily:['Лёгкий увлажняющий флюид','увлажняет без жирной плёнки и не забивает поры'],
+    combo:['Лёгкий крем или флюид','увлажняет, матирует Т-зону'],
+    normal:['Увлажняющий крем','поддерживает баланс влаги в течение дня'],
+    dry:['Питательный крем с церамидами','восстанавливает барьер и удерживает влагу'],
+    sensitive:['Крем с церамидами','восстанавливает ослабленный защитный барьер'],
+  };
+  var spfMap={
+    oily:['Солнцезащита SPF 50+','матирующая, защищает от пигментации и старения'],
+    combo:['Солнцезащита SPF 50+','защищает от УФ и неровного тона'],
+    normal:['Солнцезащита SPF 50+','сохраняет ровный тон и молодость кожи'],
+    dry:['Солнцезащита SPF 50+','защищает ослабленный барьер от солнца'],
+    sensitive:['Солнцезащита SPF 50+','мягкая защита, снижает покраснения от солнца'],
+  };
+
+  // Фиксируем одну умывалку на утро и вечер
+  var cleanseStep=cleanseMap[s];
+
+  // Утренние шаги
+  var morningSteps=[];
+  morningSteps.push(['Очищение', cleanseStep]);
+  morningSteps.push(['Тоник', tonicMap[s]]);
+  if(isSummer&&!isSens) morningSteps.push(['Антиоксидант', ['Сыворотка с витамином С','защищает от УФ и городской среды, выравнивает тон и придаёт сияние']]);
+  morningSteps.push(['Крем', creamMap[s]]);
+  morningSteps.push(['Защита', spfMap[s]]);
+
+  // Вечерние шаги
+  var eveningSteps=[];
+  if(!isMale) eveningSteps.push(['Снятие макияжа', ['Мицеллярная вода','бережно растворяет макияж и загрязнения']]);
+  eveningSteps.push([isMale?'Очищение (двойное)':'Очищение', cleanseStep]);
+  if(blackheads&&!isSens){
+    eveningSteps.push(['Тоник с кислотой ('+(s==='oily'?'2–3':'1–2')+'×/нед.)',
+      ['Тоник с салициловой кислотой (BHA)','растворяет себум внутри пор, уменьшает чёрные точки и воспаления']]);
+  } else {
+    eveningSteps.push(['Тоник', tonicMap[s]]);
+  }
+  if((concerns.includes('pigment')||concerns.includes('rosacea'))&&!isSens){
+    eveningSteps.push(['Сыворотка',
+      ['Сыворотка с азелаиновой кислотой', concerns.includes('rosacea')?'уменьшает покраснения и сосудистую сетку, выравнивает тон':'осветляет пигментацию и выравнивает тон кожи']]);
+  }
+  if(wantRetinol){
+    eveningSteps.push(['Ретинол (2–3×/нед.)',
+      ['Средство с ретинолом (витамин А)','стимулирует обновление кожи, разглаживает морщины и повышает упругость — вводить постепенно']]);
+  }
+  eveningSteps.push(['Крем', creamMap[s]]);
+  if(isSens){
+    eveningSteps.push(['Энзимная маска (1×/нед.)',
+      ['Энзимная маска','мягко отшелушивает без кислот, не травмируя чувствительную кожу']]);
+  }
+
   var careMorningWhy={
     oily:'Утром кожа защищается от внешней среды. Лёгкие текстуры не перегружают жирную кожу, а SPF 50+ обязателен — он предотвращает пигментацию и преждевременное старение.',
     combo:'Утренний уход балансирует разные зоны лица. SPF 50+ каждое утро — основа защиты от старения и пятен.',
@@ -637,35 +706,43 @@ function buildResult(name){
     dry:'Сухая кожа теряет влагу за ночь, поэтому утром важно напитать и удержать влагу. SPF 50+ защищает ослабленный барьер.',
     sensitive:'Чувствительной коже нужны максимально мягкие средства без отдушек. SPF 50+ снижает реактивность и покраснения от солнца.',
   };
-  var careEvening={
-    oily:clean+' → тоник'+(concerns.includes('blackheads')?' с салициловой кислотой (2–3×/нед.)':'')+' → лёгкий крем',
-    combo:clean+' → тоник'+(concerns.includes('blackheads')?' с кислотой (1–2×/нед.)':'')+' → крем',
-    normal:clean+' → тоник → '+(hasAging?'ретинол (2–3×/нед.) → ':'')+'крем',
-    dry:clean+' → увлажняющий тоник → '+(hasAging?'ретинол (2×/нед.) → ':'')+'питательный крем',
-    sensitive:clean+' → успокаивающий тоник → крем с церамидами',
-  };
   var careEveningWhy={
-    oily:'Вечером кожа восстанавливается. '+(concerns.includes('blackheads')?'Салициловая кислота растворяет жир внутри пор — в свободные дни обычный тоник, чтобы не пересушить.':'Лёгкий крем поддерживает баланс, не забивая поры.'),
-    combo:'Вечерний уход восстанавливает кожу после дня. '+(concerns.includes('blackheads')?'Кислота помогает с порами в Т-зоне.':'Крем поддерживает гидробаланс.'),
-    normal:'Вечером кожа активнее регенерирует. '+(hasAging?'Ретинол в это время работает лучше всего — стимулирует обновление и борется с морщинами.':'Питательный крем закрепляет результат.'),
-    dry:'Вечером важно глубоко напитать кожу. '+(hasAging?'Ретинол вводят постепенно — он обновляет кожу, но требует увлажнения.':'Плотный крем восстанавливает липидный барьер за ночь.'),
-    sensitive:'Минимум шагов, максимум комфорта. Церамиды восстанавливают защитный барьер, который у чувствительной кожи ослаблен.',
+    oily:'Вечером кожа восстанавливается. '+(blackheads?'Тоник с салициловой кислотой растворяет жир внутри пор — в свободные дни обычный тоник, чтобы не пересушить.':'Лёгкий крем поддерживает баланс, не забивая поры.'),
+    combo:'Вечерний уход восстанавливает кожу после дня. '+(blackheads?'Кислота помогает с порами в Т-зоне.':'Крем поддерживает гидробаланс.'),
+    normal:'Вечером кожа активнее регенерирует. '+(wantRetinol?'Ретинол в это время работает лучше всего — стимулирует обновление и борется с морщинами.':'Питательный крем закрепляет результат.'),
+    dry:'Вечером важно глубоко напитать кожу. '+(wantRetinol?'Ретинол вводят постепенно — он обновляет кожу и разглаживает морщины, но требует увлажнения.':'Плотный крем восстанавливает липидный барьер за ночь.'),
+    sensitive:'Минимум шагов, максимум комфорта. Церамиды восстанавливают барьер, а энзимная маска раз в неделю мягко обновляет кожу без кислот.',
   };
 
-  // ── Активные вещества под запросы ──────────────────────────────────────────
   var actives=[];
-  if(concerns.includes('blackheads')||concerns.includes('acne')) actives.push(['Салициловая кислота (BHA)','очищает поры изнутри, против чёрных точек и жирности']);
-  if(concerns.includes('acne')) actives.push(['Азелаиновая кислота','снимает воспаления и выравнивает тон']);
-  if(concerns.includes('pigment')) actives.push(['Витамин С','осветляет пигментацию и придаёт сияние (утром)']);
-  if(concerns.includes('pigment')) actives.push(['Азелаиновая / транексамовая кислота','выравнивают тон вечером']);
-  if(hasAging) actives.push(['Ретинол','разглаживает морщины, стимулирует обновление (вводить постепенно)']);
-  if(hasAging) actives.push(['Пептиды','поддерживают упругость и плотность кожи']);
-  if(concerns.includes('rosacea')) actives.push(['Азелаиновая кислота','уменьшает покраснения и сосудистую сетку']);
-  if(concerns.includes('rosacea')) actives.push(['Центелла, пантенол','успокаивают и укрепляют сосуды']);
-  if(concerns.includes('dehydration')||skin==='dry') actives.push(['Гиалуроновая кислота','притягивает и удерживает влагу']);
+  // Активы строго соответствуют тому, что реально попало в уход выше
+
+  // Салициловая — если в вечернем уходе есть тоник с кислотой (blackheads, не sensitive)
+  if(blackheads&&!isSens) actives.push(['Салициловая кислота (BHA)','очищает поры изнутри, против чёрных точек и жирности']);
+
+  // Азелаиновая — если добавлена в уход (pigment или rosacea, не sensitive)
+  if((concerns.includes('pigment')||concerns.includes('rosacea'))&&!isSens){
+    actives.push(['Азелаиновая кислота', concerns.includes('rosacea')?'уменьшает покраснения и сосудистую сетку':'осветляет пигментацию, выравнивает тон']);
+  }
+
+  // Витамин С / антиоксиданты — если в утреннем уходе есть антиоксидант (лето, не sensitive)
+  if(isSummer&&!isSens) actives.push(['Витамин С / антиоксиданты','защита от УФ и городской среды, сияние и ровный тон (лето)']);
+
+  // Ретинол — строго как в уходе (wantRetinol = aging или 45+, не sens, не active)
+  if(wantRetinol) actives.push(['Ретинол (витамин А)','разглаживает морщины, стимулирует обновление — вводить постепенно']);
+
+  // Церамиды — для типов кожи где крем с церамидами (dry, sensitive)
   if(skin==='dry'||isSens) actives.push(['Церамиды','восстанавливают защитный барьер кожи']);
+
+  // Гиалуроновая — при обезвоженности или сухой коже
+  if(concerns.includes('dehydration')||skin==='dry') actives.push(['Гиалуроновая кислота','притягивает и удерживает влагу']);
+
+  // Ниацинамид — для жирной/комби (регуляция себума)
   if(skin==='oily'||skin==='combo') actives.push(['Ниацинамид','регулирует себум, сужает поры']);
-  if(isSummer&&!isSens) actives.push(['Антиоксиданты (вит. С, феруловая к-та)','защита от УФ и городской среды (лето)']);
+
+  // Пантенол/центелла — для чувствительной и при розацеа
+  if(isSens||concerns.includes('rosacea')) actives.push(['Пантенол, центелла','успокаивают и укрепляют сосуды']);
+
   // Уникализируем по названию
   var seenAct={}; actives=actives.filter(function(a){if(seenAct[a[0]])return false;seenAct[a[0]]=1;return true;}).slice(0,5);
 
@@ -722,11 +799,11 @@ function buildResult(name){
     +'<div id="care-body" style="display:none;margin-top:14px">'
     +'<div class="care-block">'
     +'<div class="care-time">&#9728; Утро</div>'
-    +'<div class="care-steps">'+careMorning[skin]+'</div>'
+    +morningSteps.map(function(st){return '<div class="care-step"><div class="care-step-label">'+st[0]+'</div><div class="care-step-prod"><b>'+st[1][0]+'</b></div><div class="care-step-why">'+st[1][1]+'</div></div>';}).join('')
     +'<div class="care-why">'+careMorningWhy[skin]+'</div>'
     +'<div class="care-divider"></div>'
     +'<div class="care-time">&#9790; Вечер</div>'
-    +'<div class="care-steps">'+careEvening[skin]+'</div>'
+    +eveningSteps.map(function(st){return '<div class="care-step"><div class="care-step-label">'+st[0]+'</div><div class="care-step-prod"><b>'+st[1][0]+'</b></div><div class="care-step-why">'+st[1][1]+'</div></div>';}).join('')
     +'<div class="care-why">'+careEveningWhy[skin]+'</div>'
     +(actives.length?'<div class="care-divider"></div>'
       +'<div class="actives-title">Активные вещества, которые вам подойдут:</div>'
